@@ -12,7 +12,7 @@ class Average extends Component{
     }
   }
 average =() => {
-  this.setState({a = (this.state.p + this.state.c + this.state.m +this.state.h + this.state.e)/5 });
+  this.setState({a : (this.state.p + this.state.c + this.state.m +this.state.h + this.state.e)/5 });
 }
 
 render(){
