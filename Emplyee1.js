@@ -7,9 +7,25 @@ constructor(){
   this.state = {
 emps : [],
 name : "",
-dept : ""
+dept : "",
+btn_stt : true,
+update_id : ''
   }
   
+}
+
+updateRecord = ()=>{
+  console.log('The update i is',this.state.update_id)
+  axios.put("https://my-test-project-38e69.firebaseio.com/employees/"+this.state.update_id+".json",{
+    
+   name : this.state.name,
+   dept : this.state.dept
+  }).then((res)=>{
+console.log('Recored updated')
+  })
+  .catch((err)=>{
+    console.log('The error  is ',err)
+  })
 }
 
 componentWillMount(){
@@ -68,18 +84,30 @@ this.getRecords();
 })
 }
 
+editRecord = (data)=>{
+this.setState({
+  name : data.record.name,
+  dept : data.record.dept,
+  btn_stt : false,
+  update_id : data.key
+})
+}
 
 render(){
   return (//JUSX Template
     <div>
 <p>
-Name : <input onChange={(evt)=>this.setState({name : evt.target.value})} />
+Name : <input value={this.state.name} onChange={(evt)=>this.setState({name : evt.target.value})} />
 </p>
 <p>
-Department : <input onChange={(evt)=>this.setState({dept : evt.target.value})}/>
+Department : <input value={this.state.dept} onChange={(evt)=>this.setState({dept : evt.target.value})}/>
 </p>
 <p>
-<button onClick={()=>this.saveRecord()}>Save</button>
+{
+(this.state.btn_stt==true)? <button onClick={()=>this.saveRecord()}>Save</button> : <button onClick={()=>this.updateRecord()}>Update</button>
+
+
+}
 </p>
 <hr/>
 <table >
@@ -91,6 +119,10 @@ this.state.emps.map((emp)=>{
 <td>{emp.record.name}</td>
 <td>{emp.record.dept}</td>
 <td>
+
+<button onClick={()=>this.editRecord(emp)}>Edit</button> | 
+
+
 <button onClick={()=>this.delRecord(emp.key)}>Del</button>
 </td>
     </tr>
